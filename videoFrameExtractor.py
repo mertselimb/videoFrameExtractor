@@ -4,6 +4,10 @@ import cv2
 
 directory = "./videos"
 directories = [directory, "./output"]
+skipFrame = 50 # Write image every 50 frames
+reportFrame = 1000 # Report every 1000 frames
+
+print("Writing once every %d frames." % skipFrame)
 
 for d in directories:
     if not(os.path.isdir(d)):
@@ -14,19 +18,28 @@ if not os.listdir(directory) :
 
 f = 1
 for filename in os.listdir(directory):
-	print(str(f) + ". file.")
-	print("Working on: " + filename)
+	print("%d. file." % f)
+	print("Working on: %s" % filename)
 	videoPath = os.path.join(directory, filename)
 
 	name = os.path.splitext(filename)[0]
 	outputDir = "./output/" + name + "/"
+	
 	if not(os.path.isdir(outputDir)):
 		os.mkdir(outputDir)
+
 	vidcap = cv2.VideoCapture(videoPath)
+
+	length = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
+	print("Frame count: %d" % length)
+
 	success,image = vidcap.read()
 	count = 0
 	while success:
-		cv2.imwrite(outputDir + "frame%d.jpg" % count, image)
+		if(count % skipFrame == 0):
+			if(count % reportFrame == 0):
+				print("At %d. frame" % count)
+			cv2.imwrite(outputDir + "frame%d.jpg" % count, image)
 		success,image = vidcap.read()
 		count = count + 1
 	f = f + 1
