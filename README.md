@@ -1,5 +1,5 @@
 ## videoFrameExtractor
-Video frame extracter that utilizes Opencv 3.2.0 and python 3.7
+Video frame extractor that utilizes Opencv 3.2.0 and python 3.7
 
 
 ### input dir: ./videos
