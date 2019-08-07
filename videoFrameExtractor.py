@@ -1,13 +1,11 @@
 import os
 import cv2
-
+import math
 
 directory = "./videos"
 directories = [directory, "./output"]
-skipFrame = 50 # Write image every 50 frames
-reportFrame = 1000 # Report every 1000 frames
-
-print("Writing once every %d frames." % skipFrame)
+expectedFrameRate = 7.5 # FPS of output
+reportFrame = 100 # Report every 100 frames
 
 for d in directories:
     if not(os.path.isdir(d)):
@@ -29,9 +27,15 @@ for filename in os.listdir(directory):
 		os.mkdir(outputDir)
 
 	vidcap = cv2.VideoCapture(videoPath)
+	
+	oldFPS = vidcap.get(cv2.CAP_PROP_FPS)
+	print("Old FPS: %d New FPS: %d" %oldFPS, %expectedFrameRate)
+	skipFrame = math.floor(oldFPS/expectedFrameRate) 
+	print("Writing once every %d frames." % skipFrame)
 
 	length = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
 	print("Frame count: %d" % length)
+
 
 	success,image = vidcap.read()
 	count = 0
